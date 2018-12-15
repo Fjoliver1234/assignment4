@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+
+<svg width="960" height="600"></svg>
+
+<script src="https://d3js.org/d3.v4.min.js"></script>
+<script>
+    var baseNodes = [
+        {'id': 'AAL', 'group': 1, 'label': 'Aalborg Airport', 'level': 2},
+        {'id': 'AAR', 'group': 1, 'label': 'Aarhus Airport', 'level': 2},
+        {'id': 'ABZ', 'group': 2, 'label': 'Aberdeen Dyce Airport', 'level': 2},
+        {'id': 'BEB', 'group': 2, 'label': 'Benbecula Airport', 'level': 2},
+        {'id': 'BFS',
+            'group': 2,
+            'label': 'Belfast International Airport',
+            'level': 1},
+        {'id': 'BHD',
+            'group': 2,
+            'label': 'George Best Belfast City Airport',
+            'level': 1},
+        {'id': 'BHX',
+            'group': 2,
+            'label': 'Birmingham International Airport',
+            'level': 2},
+        {'id': 'BLK',
+            'group': 2,
+            'label': 'Blackpool International Airport',
+            'level': 2},
+        {'id': 'BLL', 'group': 1, 'label': 'Billund Airport', 'level': 2},
+        {'id': 'BOH', 'group': 2, 'label': 'Bournemouth Airport', 'level': 2},
+        {'id': 'BRR', 'group': 2, 'label': 'Barra Airport', 'level': 2},
+        {'id': 'BRS', 'group': 2, 'label': 'Bristol Airport', 'level': 2},
+        {'id': 'CAL', 'group': 2, 'label': 'Campbeltown Airport', 'level': 2},
+        {'id': 'CEG', 'group': 2, 'label': 'Hawarden Airport', 'level': 2},
+        {'id': 'CFN', 'group': 3, 'label': 'Donegal Airport', 'level': 2},
+        {'id': 'CPH', 'group': 1, 'label': 'Copenhagen Kastrup Airport', 'level': 1},
+        {'id': 'CWL',
+            'group': 2,
+            'label': 'Cardiff International Airport',
+            'level': 1},
+        {'id': 'DND', 'group': 2, 'label': 'Dundee Airport', 'level': 2},
+        {'id': 'DUB', 'group': 3, 'label': 'Dublin Airport', 'level': 1},
+        {'id': 'EBJ', 'group': 1, 'label': 'Esbjerg Airport', 'level': 2},
+        {'id': 'EDI', 'group': 2, 'label': 'Edinburgh Airport', 'level': 1},
+        {'id': 'EMA', 'group': 2, 'label': 'East Midlands Airport', 'level': 2},
+        {'id': 'EOI', 'group': 2, 'label': 'Eday Airport', 'level': 2},
+        {'id': 'EXT',
+            'group': 2,
+            'label': 'Exeter International Airport',
+            'level': 2},
+        {'id': 'GLA',
+            'group': 2,
+            'label': 'Glasgow International Airport',
+            'level': 2},
+        {'id': 'HUY', 'group': 2, 'label': 'Humberside Airport', 'level': 2},
+        {'id': 'ILY', 'group': 2, 'label': 'Islay Airport', 'level': 2},
+        {'id': 'INV', 'group': 2, 'label': 'Inverness Airport', 'level': 2},
+        {'id': 'ISC', 'group': 2, 'label': "St. Mary's Airport", 'level': 2},
+        {'id': 'KIR', 'group': 3, 'label': 'Kerry Airport', 'level': 2},
+        {'id': 'KOI', 'group': 2, 'label': 'Kirkwall Airport', 'level': 2},
+        {'id': 'KRP', 'group': 1, 'label': 'Karup Airport', 'level': 2},
+        {'id': 'LBA', 'group': 2, 'label': 'Leeds Bradford Airport', 'level': 2},
+        {'id': 'LCY', 'group': 2, 'label': 'London City Airport', 'level': 1},
+        {'id': 'LDY', 'group': 2, 'label': 'City of Derry Airport', 'level': 2},
+        {'id': 'LEQ', 'group': 2, 'label': "Land's End Airport", 'level': 2},
+        {'id': 'LGW', 'group': 2, 'label': 'London Gatwick Airport', 'level': 1},
+        {'id': 'LHR', 'group': 2, 'label': 'London Heathrow Airport', 'level': 1},
+        {'id': 'LPL',
+            'group': 2,
+            'label': 'Liverpool John Lennon Airport',
+            'level': 2},
+        {'id': 'LSI', 'group': 2, 'label': 'Sumburgh Airport', 'level': 2},
+        {'id': 'LTN', 'group': 2, 'label': 'London Luton Airport', 'level': 1},
+        {'id': 'MAN', 'group': 2, 'label': 'Manchester Airport', 'level': 2},
+        {'id': 'MME', 'group': 2, 'label': 'Durham Tees Valley Airport', 'level': 2},
+        {'id': 'NCL', 'group': 2, 'label': 'Newcastle Airport', 'level': 2},
+        {'id': 'NDY', 'group': 2, 'label': 'Sanday Airport', 'level': 2},
+        {'id': 'NOC', 'group': 3, 'label': 'Ireland West Knock Airport', 'level': 2},
+        {'id': 'NQY', 'group': 2, 'label': 'Newquay Cornwall Airport', 'level': 2},
+        {'id': 'NRL', 'group': 2, 'label': 'North Ronaldsay Airport', 'level': 2},
+        {'id': 'NWI',
+            'group': 2,
+            'label': 'Norwich International Airport',
+            'level': 2},
+        {'id': 'ORK', 'group': 3, 'label': 'Cork Airport', 'level': 2},
+        {'id': 'PIK', 'group': 2, 'label': 'Glasgow Prestwick Airport', 'level': 2},
+        {'id': 'PPW', 'group': 2, 'label': 'Papa Westray Airport', 'level': 2},
+        {'id': 'RNN', 'group': 1, 'label': 'Bornholm Airport', 'level': 2},
+        {'id': 'SEN', 'group': 2, 'label': 'Southend Airport', 'level': 2},
+        {'id': 'SGD', 'group': 1, 'label': 'Sønderborg Airport', 'level': 2},
+        {'id': 'SNN', 'group': 3, 'label': 'Shannon Airport', 'level': 2},
+        {'id': 'SOU', 'group': 2, 'label': 'Southampton Airport', 'level': 2},
+        {'id': 'SOY', 'group': 2, 'label': 'Stronsay Airport', 'level': 2},
+        {'id': 'STN', 'group': 2, 'label': 'London Stansted Airport', 'level': 1},
+        {'id': 'SYY', 'group': 2, 'label': 'Stornoway Airport', 'level': 2},
+        {'id': 'TRE', 'group': 2, 'label': 'Tiree Airport', 'level': 2},
+        {'id': 'VLY', 'group': 2, 'label': 'Anglesey Airport', 'level': 2},
+        {'id': 'WAT', 'group': 3, 'label': 'Waterford Airport', 'level': 2},
+        {'id': 'WIC', 'group': 2, 'label': 'Wick Airport', 'level': 2},
+        {'id': 'WRY', 'group': 2, 'label': 'Westray Airport', 'level': 2}
+    ]
+
+    var baseLinks = [
+        {'source': 'AAL', 'target': 'AAR', 'strength': 0.1},
+        {'source': 'AAL', 'target': 'BLL', 'strength': 0.3},
+        {'source': 'AAL', 'target': 'CPH', 'strength': 0.2},
+        {'source': 'AAL', 'target': 'LGW', 'strength': 0.1},
+        {'source': 'AAR', 'target': 'AAL', 'strength': 0.1},
+        {'source': 'AAR', 'target': 'CPH', 'strength': 0.1},
+        {'source': 'AAR', 'target': 'STN', 'strength': 0.1},
+        {'source': 'ABZ', 'target': 'BHD', 'strength': 0.1},
+        {'source': 'ABZ', 'target': 'BHX', 'strength': 0.1},
+        {'source': 'ABZ', 'target': 'BRS', 'strength': 0.1},
+        {'source': 'ABZ', 'target': 'CPH', 'strength': 0.1},
+        {'source': 'ABZ', 'target': 'DUB', 'strength': 0.1},
+        {'source': 'ABZ', 'target': 'EBJ', 'strength': 0.1},
+        {'source': 'ABZ', 'target': 'EMA', 'strength': 0.1},
+        {'source': 'ABZ', 'target': 'HUY', 'strength': 0.1},
+        {'source': 'ABZ', 'target': 'KOI', 'strength': 0.1},
+        {'source': 'ABZ', 'target': 'LBA', 'strength': 0.1},
+        {'source': 'ABZ', 'target': 'LCY', 'strength': 0.1},
+        {'source': 'ABZ', 'target': 'LGW', 'strength': 0.1},
+        {'source': 'ABZ', 'target': 'LHR', 'strength': 0.5},
+        {'source': 'ABZ', 'target': 'LSI', 'strength': 0.1},
+        {'source': 'ABZ', 'target': 'LTN', 'strength': 0.1},
+        {'source': 'ABZ', 'target': 'MAN', 'strength': 0.2},
+        {'source': 'ABZ', 'target': 'MME', 'strength': 0.1},
+        {'source': 'ABZ', 'target': 'NCL', 'strength': 0.1},
+        {'source': 'ABZ', 'target': 'NWI', 'strength': 0.2},
+        {'source': 'ABZ', 'target': 'SYY', 'strength': 0.1},
+        {'source': 'ABZ', 'target': 'WIC', 'strength': 0.1},
+        {'source': 'BEB', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'BEB', 'target': 'SYY', 'strength': 0.1},
+        {'source': 'BFS', 'target': 'BHX', 'strength': 0.1},
+        {'source': 'BFS', 'target': 'BRS', 'strength': 0.1},
+        {'source': 'BFS', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'BFS', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'BFS', 'target': 'LGW', 'strength': 0.1},
+        {'source': 'BFS', 'target': 'LPL', 'strength': 0.1},
+        {'source': 'BFS', 'target': 'LTN', 'strength': 0.1},
+        {'source': 'BFS', 'target': 'MAN', 'strength': 0.1},
+        {'source': 'BFS', 'target': 'NCL', 'strength': 0.1},
+        {'source': 'BFS', 'target': 'STN', 'strength': 0.1},
+        {'source': 'BHD', 'target': 'ABZ', 'strength': 0.1},
+        {'source': 'BHD', 'target': 'BHX', 'strength': 0.1},
+        {'source': 'BHD', 'target': 'CWL', 'strength': 0.1},
+        {'source': 'BHD', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'BHD', 'target': 'EMA', 'strength': 0.1},
+        {'source': 'BHD', 'target': 'EXT', 'strength': 0.1},
+        {'source': 'BHD', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'BHD', 'target': 'INV', 'strength': 0.1},
+        {'source': 'BHD', 'target': 'LBA', 'strength': 0.1},
+        {'source': 'BHD', 'target': 'LGW', 'strength': 0.1},
+        {'source': 'BHD', 'target': 'LHR', 'strength': 0.4},
+        {'source': 'BHD', 'target': 'MAN', 'strength': 0.1},
+        {'source': 'BHD', 'target': 'NCL', 'strength': 0.1},
+        {'source': 'BHD', 'target': 'SOU', 'strength': 0.1},
+        {'source': 'BHX', 'target': 'ABZ', 'strength': 0.1},
+        {'source': 'BHX', 'target': 'BFS', 'strength': 0.1},
+        {'source': 'BHX', 'target': 'BHD', 'strength': 0.1},
+        {'source': 'BHX', 'target': 'CPH', 'strength': 0.1},
+        {'source': 'BHX', 'target': 'DUB', 'strength': 0.2},
+        {'source': 'BHX', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'BHX', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'BHX', 'target': 'INV', 'strength': 0.1},
+        {'source': 'BHX', 'target': 'LDY', 'strength': 0.1},
+        {'source': 'BHX', 'target': 'NCL', 'strength': 0.1},
+        {'source': 'BHX', 'target': 'NOC', 'strength': 0.1},
+        {'source': 'BHX', 'target': 'ORK', 'strength': 0.1},
+        {'source': 'BHX', 'target': 'SNN', 'strength': 0.1},
+        {'source': 'BHX', 'target': 'WAT', 'strength': 0.1},
+        {'source': 'BLK', 'target': 'DUB', 'strength': 0.1},
+        {'source': 'BLL', 'target': 'AAL', 'strength': 0.2},
+        {'source': 'BLL', 'target': 'CPH', 'strength': 0.1},
+        {'source': 'BLL', 'target': 'EBJ', 'strength': 0.1},
+        {'source': 'BLL', 'target': 'LCY', 'strength': 0.1},
+        {'source': 'BLL', 'target': 'MAN', 'strength': 0.1},
+        {'source': 'BLL', 'target': 'STN', 'strength': 0.1},
+        {'source': 'BOH', 'target': 'DUB', 'strength': 0.1},
+        {'source': 'BRR', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'BRS', 'target': 'ABZ', 'strength': 0.1},
+        {'source': 'BRS', 'target': 'BFS', 'strength': 0.1},
+        {'source': 'BRS', 'target': 'CEG', 'strength': 0.1},
+        {'source': 'BRS', 'target': 'CPH', 'strength': 0.1},
+        {'source': 'BRS', 'target': 'DUB', 'strength': 0.2},
+        {'source': 'BRS', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'BRS', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'BRS', 'target': 'INV', 'strength': 0.1},
+        {'source': 'BRS', 'target': 'NCL', 'strength': 0.1},
+        {'source': 'BRS', 'target': 'NOC', 'strength': 0.1},
+        {'source': 'BRS', 'target': 'ORK', 'strength': 0.1},
+        {'source': 'BRS', 'target': 'SNN', 'strength': 0.1},
+        {'source': 'CAL', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'CEG', 'target': 'BRS', 'strength': 0.1},
+        {'source': 'CFN', 'target': 'DUB', 'strength': 0.1},
+        {'source': 'CFN', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'CPH', 'target': 'AAL', 'strength': 0.2},
+        {'source': 'CPH', 'target': 'AAR', 'strength': 0.1},
+        {'source': 'CPH', 'target': 'ABZ', 'strength': 0.1},
+        {'source': 'CPH', 'target': 'BHX', 'strength': 0.1},
+        {'source': 'CPH', 'target': 'BLL', 'strength': 0.1},
+        {'source': 'CPH', 'target': 'BRS', 'strength': 0.1},
+        {'source': 'CPH', 'target': 'DUB', 'strength': 0.3},
+        {'source': 'CPH', 'target': 'EDI', 'strength': 0.2},
+        {'source': 'CPH', 'target': 'KRP', 'strength': 0.1},
+        {'source': 'CPH', 'target': 'LBA', 'strength': 0.1},
+        {'source': 'CPH', 'target': 'LGW', 'strength': 0.2},
+        {'source': 'CPH', 'target': 'LHR', 'strength': 0.3},
+        {'source': 'CPH', 'target': 'MAN', 'strength': 0.3},
+        {'source': 'CPH', 'target': 'NCL', 'strength': 0.1},
+        {'source': 'CPH', 'target': 'RNN', 'strength': 0.1},
+        {'source': 'CPH', 'target': 'SGD', 'strength': 0.1},
+        {'source': 'CPH', 'target': 'STN', 'strength': 0.1},
+        {'source': 'CWL', 'target': 'BHD', 'strength': 0.1},
+        {'source': 'CWL', 'target': 'DUB', 'strength': 0.1},
+        {'source': 'CWL', 'target': 'EDI', 'strength': 0.2},
+        {'source': 'CWL', 'target': 'GLA', 'strength': 0.2},
+        {'source': 'CWL', 'target': 'NCL', 'strength': 0.1},
+        {'source': 'CWL', 'target': 'VLY', 'strength': 0.1},
+        {'source': 'DND', 'target': 'STN', 'strength': 0.1},
+        {'source': 'DUB', 'target': 'ABZ', 'strength': 0.1},
+        {'source': 'DUB', 'target': 'BHX', 'strength': 0.2},
+        {'source': 'DUB', 'target': 'BLK', 'strength': 0.1},
+        {'source': 'DUB', 'target': 'BOH', 'strength': 0.1},
+        {'source': 'DUB', 'target': 'BRS', 'strength': 0.2},
+        {'source': 'DUB', 'target': 'CFN', 'strength': 0.1},
+        {'source': 'DUB', 'target': 'CPH', 'strength': 0.3},
+        {'source': 'DUB', 'target': 'CWL', 'strength': 0.1},
+        {'source': 'DUB', 'target': 'EDI', 'strength': 0.2},
+        {'source': 'DUB', 'target': 'EMA', 'strength': 0.1},
+        {'source': 'DUB', 'target': 'EXT', 'strength': 0.1},
+        {'source': 'DUB', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'DUB', 'target': 'KIR', 'strength': 0.1},
+        {'source': 'DUB', 'target': 'LBA', 'strength': 0.1},
+        {'source': 'DUB', 'target': 'LCY', 'strength': 0.2},
+        {'source': 'DUB', 'target': 'LGW', 'strength': 0.2},
+        {'source': 'DUB', 'target': 'LHR', 'strength': 0.3},
+        {'source': 'DUB', 'target': 'LPL', 'strength': 0.1},
+        {'source': 'DUB', 'target': 'LTN', 'strength': 0.1},
+        {'source': 'DUB', 'target': 'MAN', 'strength': 0.2},
+        {'source': 'DUB', 'target': 'NCL', 'strength': 0.2},
+        {'source': 'DUB', 'target': 'PIK', 'strength': 0.1},
+        {'source': 'DUB', 'target': 'SEN', 'strength': 0.1},
+        {'source': 'DUB', 'target': 'SOU', 'strength': 0.1},
+        {'source': 'DUB', 'target': 'STN', 'strength': 0.1},
+        {'source': 'EBJ', 'target': 'ABZ', 'strength': 0.1},
+        {'source': 'EBJ', 'target': 'BLL', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'BFS', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'BHD', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'BHX', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'BRS', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'CPH', 'strength': 0.2},
+        {'source': 'EDI', 'target': 'CWL', 'strength': 0.2},
+        {'source': 'EDI', 'target': 'DUB', 'strength': 0.2},
+        {'source': 'EDI', 'target': 'EMA', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'EXT', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'KOI', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'LCY', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'LGW', 'strength': 0.2},
+        {'source': 'EDI', 'target': 'LHR', 'strength': 0.5},
+        {'source': 'EDI', 'target': 'LSI', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'LTN', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'MAN', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'NWI', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'ORK', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'SEN', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'SNN', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'SOU', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'STN', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'SYY', 'strength': 0.1},
+        {'source': 'EDI', 'target': 'WIC', 'strength': 0.1},
+        {'source': 'EMA', 'target': 'ABZ', 'strength': 0.1},
+        {'source': 'EMA', 'target': 'BHD', 'strength': 0.1},
+        {'source': 'EMA', 'target': 'DUB', 'strength': 0.1},
+        {'source': 'EMA', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'EMA', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'EMA', 'target': 'NOC', 'strength': 0.1},
+        {'source': 'EMA', 'target': 'ORK', 'strength': 0.1},
+        {'source': 'EOI', 'target': 'KOI', 'strength': 0.1},
+        {'source': 'EXT', 'target': 'BHD', 'strength': 0.1},
+        {'source': 'EXT', 'target': 'DUB', 'strength': 0.1},
+        {'source': 'EXT', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'EXT', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'EXT', 'target': 'ISC', 'strength': 0.1},
+        {'source': 'EXT', 'target': 'MAN', 'strength': 0.1},
+        {'source': 'EXT', 'target': 'NQY', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'BEB', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'BFS', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'BHD', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'BHX', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'BRR', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'BRS', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'CAL', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'CFN', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'CWL', 'strength': 0.2},
+        {'source': 'GLA', 'target': 'DUB', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'EMA', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'EXT', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'ILY', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'KOI', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'LBA', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'LCY', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'LGW', 'strength': 0.2},
+        {'source': 'GLA', 'target': 'LHR', 'strength': 0.3},
+        {'source': 'GLA', 'target': 'LSI', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'LTN', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'MAN', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'ORK', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'SOU', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'STN', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'SYY', 'strength': 0.1},
+        {'source': 'GLA', 'target': 'TRE', 'strength': 0.1},
+        {'source': 'HUY', 'target': 'ABZ', 'strength': 0.1},
+        {'source': 'HUY', 'target': 'NWI', 'strength': 0.1},
+        {'source': 'ILY', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'INV', 'target': 'BHD', 'strength': 0.1},
+        {'source': 'INV', 'target': 'BHX', 'strength': 0.1},
+        {'source': 'INV', 'target': 'BRS', 'strength': 0.1},
+        {'source': 'INV', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'INV', 'target': 'KOI', 'strength': 0.1},
+        {'source': 'INV', 'target': 'LGW', 'strength': 0.1},
+        {'source': 'INV', 'target': 'LSI', 'strength': 0.1},
+        {'source': 'INV', 'target': 'LTN', 'strength': 0.1},
+        {'source': 'INV', 'target': 'MAN', 'strength': 0.1},
+        {'source': 'INV', 'target': 'SYY', 'strength': 0.1},
+        {'source': 'ISC', 'target': 'EXT', 'strength': 0.1},
+        {'source': 'ISC', 'target': 'LEQ', 'strength': 0.1},
+        {'source': 'ISC', 'target': 'NQY', 'strength': 0.1},
+        {'source': 'KIR', 'target': 'DUB', 'strength': 0.1},
+        {'source': 'KIR', 'target': 'LTN', 'strength': 0.1},
+        {'source': 'KIR', 'target': 'STN', 'strength': 0.1},
+        {'source': 'KOI', 'target': 'ABZ', 'strength': 0.1},
+        {'source': 'KOI', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'KOI', 'target': 'EOI', 'strength': 0.1},
+        {'source': 'KOI', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'KOI', 'target': 'INV', 'strength': 0.1},
+        {'source': 'KOI', 'target': 'LSI', 'strength': 0.1},
+        {'source': 'KOI', 'target': 'NDY', 'strength': 0.1},
+        {'source': 'KOI', 'target': 'NRL', 'strength': 0.1},
+        {'source': 'KOI', 'target': 'PPW', 'strength': 0.1},
+        {'source': 'KOI', 'target': 'SOY', 'strength': 0.1},
+        {'source': 'KOI', 'target': 'WRY', 'strength': 0.1},
+        {'source': 'KRP', 'target': 'CPH', 'strength': 0.1},
+        {'source': 'LBA', 'target': 'ABZ', 'strength': 0.1},
+        {'source': 'LBA', 'target': 'BHD', 'strength': 0.1},
+        {'source': 'LBA', 'target': 'CPH', 'strength': 0.1},
+        {'source': 'LBA', 'target': 'DUB', 'strength': 0.1},
+        {'source': 'LBA', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'LBA', 'target': 'LHR', 'strength': 0.3},
+        {'source': 'LBA', 'target': 'SOU', 'strength': 0.1},
+        {'source': 'LCY', 'target': 'ABZ', 'strength': 0.1},
+        {'source': 'LCY', 'target': 'BLL', 'strength': 0.1},
+        {'source': 'LCY', 'target': 'DUB', 'strength': 0.2},
+        {'source': 'LCY', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'LCY', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'LDY', 'target': 'BHX', 'strength': 0.1},
+        {'source': 'LDY', 'target': 'LPL', 'strength': 0.1},
+        {'source': 'LDY', 'target': 'PIK', 'strength': 0.1},
+        {'source': 'LDY', 'target': 'STN', 'strength': 0.1},
+        {'source': 'LEQ', 'target': 'ISC', 'strength': 0.1},
+        {'source': 'LGW', 'target': 'AAL', 'strength': 0.1},
+        {'source': 'LGW', 'target': 'ABZ', 'strength': 0.1},
+        {'source': 'LGW', 'target': 'BFS', 'strength': 0.1},
+        {'source': 'LGW', 'target': 'BHD', 'strength': 0.1},
+        {'source': 'LGW', 'target': 'CPH', 'strength': 0.2},
+        {'source': 'LGW', 'target': 'DUB', 'strength': 0.2},
+        {'source': 'LGW', 'target': 'EDI', 'strength': 0.2},
+        {'source': 'LGW', 'target': 'GLA', 'strength': 0.2},
+        {'source': 'LGW', 'target': 'INV', 'strength': 0.1},
+        {'source': 'LGW', 'target': 'NCL', 'strength': 0.1},
+        {'source': 'LGW', 'target': 'NOC', 'strength': 0.1},
+        {'source': 'LGW', 'target': 'NQY', 'strength': 0.2},
+        {'source': 'LGW', 'target': 'ORK', 'strength': 0.1},
+        {'source': 'LGW', 'target': 'SNN', 'strength': 0.1},
+        {'source': 'LHR', 'target': 'ABZ', 'strength': 0.5},
+        {'source': 'LHR', 'target': 'BHD', 'strength': 0.4},
+        {'source': 'LHR', 'target': 'CPH', 'strength': 0.3},
+        {'source': 'LHR', 'target': 'DUB', 'strength': 0.3},
+        {'source': 'LHR', 'target': 'EDI', 'strength': 0.5},
+        {'source': 'LHR', 'target': 'GLA', 'strength': 0.3},
+        {'source': 'LHR', 'target': 'LBA', 'strength': 0.3},
+        {'source': 'LHR', 'target': 'MAN', 'strength': 0.5},
+        {'source': 'LHR', 'target': 'NCL', 'strength': 0.3},
+        {'source': 'LHR', 'target': 'ORK', 'strength': 0.1},
+        {'source': 'LHR', 'target': 'SNN', 'strength': 0.1},
+        {'source': 'LPL', 'target': 'BFS', 'strength': 0.1},
+        {'source': 'LPL', 'target': 'DUB', 'strength': 0.1},
+        {'source': 'LPL', 'target': 'LDY', 'strength': 0.1},
+        {'source': 'LPL', 'target': 'NOC', 'strength': 0.1},
+        {'source': 'LPL', 'target': 'ORK', 'strength': 0.1},
+        {'source': 'LPL', 'target': 'SNN', 'strength': 0.1},
+        {'source': 'LSI', 'target': 'ABZ', 'strength': 0.1},
+        {'source': 'LSI', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'LSI', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'LSI', 'target': 'INV', 'strength': 0.1},
+        {'source': 'LSI', 'target': 'KOI', 'strength': 0.1},
+        {'source': 'LTN', 'target': 'ABZ', 'strength': 0.1},
+        {'source': 'LTN', 'target': 'BFS', 'strength': 0.1},
+        {'source': 'LTN', 'target': 'DUB', 'strength': 0.1},
+        {'source': 'LTN', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'LTN', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'LTN', 'target': 'INV', 'strength': 0.1},
+        {'source': 'LTN', 'target': 'KIR', 'strength': 0.1},
+        {'source': 'LTN', 'target': 'NOC', 'strength': 0.1},
+        {'source': 'MAN', 'target': 'ABZ', 'strength': 0.2},
+        {'source': 'MAN', 'target': 'BFS', 'strength': 0.1},
+        {'source': 'MAN', 'target': 'BHD', 'strength': 0.1},
+        {'source': 'MAN', 'target': 'BLL', 'strength': 0.1},
+        {'source': 'MAN', 'target': 'CPH', 'strength': 0.3},
+        {'source': 'MAN', 'target': 'DUB', 'strength': 0.2},
+        {'source': 'MAN', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'MAN', 'target': 'EXT', 'strength': 0.1},
+        {'source': 'MAN', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'MAN', 'target': 'INV', 'strength': 0.1},
+        {'source': 'MAN', 'target': 'LHR', 'strength': 0.5},
+        {'source': 'MAN', 'target': 'NOC', 'strength': 0.1},
+        {'source': 'MAN', 'target': 'NQY', 'strength': 0.1},
+        {'source': 'MAN', 'target': 'NWI', 'strength': 0.1},
+        {'source': 'MAN', 'target': 'ORK', 'strength': 0.1},
+        {'source': 'MAN', 'target': 'SNN', 'strength': 0.1},
+        {'source': 'MAN', 'target': 'SOU', 'strength': 0.1},
+        {'source': 'MAN', 'target': 'WAT', 'strength': 0.1},
+        {'source': 'MME', 'target': 'ABZ', 'strength': 0.1},
+        {'source': 'NCL', 'target': 'ABZ', 'strength': 0.1},
+        {'source': 'NCL', 'target': 'BFS', 'strength': 0.1},
+        {'source': 'NCL', 'target': 'BHD', 'strength': 0.1},
+        {'source': 'NCL', 'target': 'BHX', 'strength': 0.1},
+        {'source': 'NCL', 'target': 'BRS', 'strength': 0.1},
+        {'source': 'NCL', 'target': 'CPH', 'strength': 0.1},
+        {'source': 'NCL', 'target': 'CWL', 'strength': 0.1},
+        {'source': 'NCL', 'target': 'DUB', 'strength': 0.2},
+        {'source': 'NCL', 'target': 'LGW', 'strength': 0.1},
+        {'source': 'NCL', 'target': 'LHR', 'strength': 0.3},
+        {'source': 'NCL', 'target': 'ORK', 'strength': 0.1},
+        {'source': 'NCL', 'target': 'SOU', 'strength': 0.1},
+        {'source': 'NDY', 'target': 'KOI', 'strength': 0.1},
+        {'source': 'NDY', 'target': 'SOY', 'strength': 0.1},
+        {'source': 'NOC', 'target': 'BHX', 'strength': 0.1},
+        {'source': 'NOC', 'target': 'BRS', 'strength': 0.1},
+        {'source': 'NOC', 'target': 'EMA', 'strength': 0.1},
+        {'source': 'NOC', 'target': 'LGW', 'strength': 0.1},
+        {'source': 'NOC', 'target': 'LPL', 'strength': 0.1},
+        {'source': 'NOC', 'target': 'LTN', 'strength': 0.1},
+        {'source': 'NOC', 'target': 'MAN', 'strength': 0.1},
+        {'source': 'NOC', 'target': 'STN', 'strength': 0.1},
+        {'source': 'NQY', 'target': 'EXT', 'strength': 0.1},
+        {'source': 'NQY', 'target': 'ISC', 'strength': 0.1},
+        {'source': 'NQY', 'target': 'LGW', 'strength': 0.2},
+        {'source': 'NQY', 'target': 'MAN', 'strength': 0.1},
+        {'source': 'NRL', 'target': 'EOI', 'strength': 0.1},
+        {'source': 'NRL', 'target': 'KOI', 'strength': 0.1},
+        {'source': 'NRL', 'target': 'NDY', 'strength': 0.1},
+        {'source': 'NRL', 'target': 'PPW', 'strength': 0.1},
+        {'source': 'NWI', 'target': 'ABZ', 'strength': 0.2},
+        {'source': 'NWI', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'NWI', 'target': 'HUY', 'strength': 0.1},
+        {'source': 'NWI', 'target': 'MAN', 'strength': 0.1},
+        {'source': 'ORK', 'target': 'BHX', 'strength': 0.1},
+        {'source': 'ORK', 'target': 'BRS', 'strength': 0.1},
+        {'source': 'ORK', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'ORK', 'target': 'EMA', 'strength': 0.1},
+        {'source': 'ORK', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'ORK', 'target': 'LGW', 'strength': 0.1},
+        {'source': 'ORK', 'target': 'LHR', 'strength': 0.1},
+        {'source': 'ORK', 'target': 'LPL', 'strength': 0.1},
+        {'source': 'ORK', 'target': 'MAN', 'strength': 0.1},
+        {'source': 'ORK', 'target': 'NCL', 'strength': 0.1},
+        {'source': 'ORK', 'target': 'STN', 'strength': 0.1},
+        {'source': 'PIK', 'target': 'DUB', 'strength': 0.1},
+        {'source': 'PIK', 'target': 'LDY', 'strength': 0.1},
+        {'source': 'PPW', 'target': 'KOI', 'strength': 0.1},
+        {'source': 'PPW', 'target': 'NRL', 'strength': 0.1},
+        {'source': 'PPW', 'target': 'WRY', 'strength': 0.1},
+        {'source': 'RNN', 'target': 'CPH', 'strength': 0.1},
+        {'source': 'SEN', 'target': 'DUB', 'strength': 0.1},
+        {'source': 'SEN', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'SGD', 'target': 'CPH', 'strength': 0.1},
+        {'source': 'SNN', 'target': 'BHX', 'strength': 0.1},
+        {'source': 'SNN', 'target': 'BRS', 'strength': 0.1},
+        {'source': 'SNN', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'SNN', 'target': 'LGW', 'strength': 0.1},
+        {'source': 'SNN', 'target': 'LHR', 'strength': 0.1},
+        {'source': 'SNN', 'target': 'LPL', 'strength': 0.1},
+        {'source': 'SNN', 'target': 'MAN', 'strength': 0.1},
+        {'source': 'SNN', 'target': 'STN', 'strength': 0.1},
+        {'source': 'SOU', 'target': 'BHD', 'strength': 0.1},
+        {'source': 'SOU', 'target': 'DUB', 'strength': 0.1},
+        {'source': 'SOU', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'SOU', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'SOU', 'target': 'LBA', 'strength': 0.1},
+        {'source': 'SOU', 'target': 'MAN', 'strength': 0.1},
+        {'source': 'SOU', 'target': 'NCL', 'strength': 0.1},
+        {'source': 'SOY', 'target': 'KOI', 'strength': 0.1},
+        {'source': 'SOY', 'target': 'NDY', 'strength': 0.1},
+        {'source': 'STN', 'target': 'AAR', 'strength': 0.1},
+        {'source': 'STN', 'target': 'BFS', 'strength': 0.1},
+        {'source': 'STN', 'target': 'BLL', 'strength': 0.1},
+        {'source': 'STN', 'target': 'CPH', 'strength': 0.1},
+        {'source': 'STN', 'target': 'DND', 'strength': 0.1},
+        {'source': 'STN', 'target': 'DUB', 'strength': 0.1},
+        {'source': 'STN', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'STN', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'STN', 'target': 'KIR', 'strength': 0.1},
+        {'source': 'STN', 'target': 'LDY', 'strength': 0.1},
+        {'source': 'STN', 'target': 'NOC', 'strength': 0.1},
+        {'source': 'STN', 'target': 'ORK', 'strength': 0.1},
+        {'source': 'STN', 'target': 'SNN', 'strength': 0.1},
+        {'source': 'SYY', 'target': 'ABZ', 'strength': 0.1},
+        {'source': 'SYY', 'target': 'BEB', 'strength': 0.1},
+        {'source': 'SYY', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'SYY', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'SYY', 'target': 'INV', 'strength': 0.1},
+        {'source': 'TRE', 'target': 'GLA', 'strength': 0.1},
+        {'source': 'VLY', 'target': 'CWL', 'strength': 0.1},
+        {'source': 'WAT', 'target': 'BHX', 'strength': 0.1},
+        {'source': 'WAT', 'target': 'MAN', 'strength': 0.1},
+        {'source': 'WIC', 'target': 'ABZ', 'strength': 0.1},
+        {'source': 'WIC', 'target': 'EDI', 'strength': 0.1},
+        {'source': 'WRY', 'target': 'KOI', 'strength': 0.1},
+        {'source': 'WRY', 'target': 'PPW', 'strength': 0.1}
+    ]
+
+    var nodes = [...baseNodes]
+    var links = [...baseLinks]
+
+    function getNeighbors(node) {
+        return baseLinks.reduce(function (neighbors, link) {
+                if (link.target.id === node.id) {
+                    neighbors.push(link.source.id)
+                } else if (link.source.id === node.id) {
+                    neighbors.push(link.target.id)
+                }
+                return neighbors
+            },
+            [node.id]
+        )
+    }
+
+    function isNeighborLink(node, link) {
+        return link.target.id === node.id || link.source.id === node.id
+    }
+
+
+    function getNodeColor(node, neighbors) {
+        if (Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1) {
+            return node.level === 1 ? '#e668ec' : '#3bc3d8'
+        }
+
+        return node.level === 1 ? '#ffbeff' : '#d1f7fd'
+    }
+
+
+    function getLinkColor(node, link) {
+        return isNeighborLink(node, link) ? '#7f7f7f' : '#E5E5E5'
+    }
+
+    function getTextColor(node, neighbors) {
+        return Array.isArray(neighbors) && neighbors.indexOf(node.id) > -1 ? 'black' : 'gray'
+    }
+
+    var width = window.innerWidth
+    var height = window.innerHeight
+    var radius = 60
+
+    var svg = d3.select('svg')
+    svg.attr('width', width).attr('height', height)
+
+    var linkElements,
+        nodeElements,
+        textElements
+
+    // we use svg groups to logically group the elements together
+    var linkGroup = svg.append('g').attr('class', 'links')
+    var nodeGroup = svg.append('g').attr('class', 'nodes')
+    var textGroup = svg.append('g').attr('class', 'texts')
+
+    // we use this reference to select/deselect
+    // after clicking the same element twice
+    var selectedId
+
+    // simulation setup with all forces
+    var linkForce = d3
+        .forceLink()
+        .id(function (link) { return link.id })
+        .strength(function (link) { return link.strength })
+
+    var simulation = d3
+        .forceSimulation()
+        .force('link', linkForce)
+        .force('charge', d3.forceManyBody().strength(-200))
+        .force('center', d3.forceCenter(width / 2, height / 2))
+
+    var dragDrop = d3.drag().on('start', function (node) {
+        node.fx = node.x
+        node.fy = node.y
+    }).on('drag', function (node) {
+        simulation.alphaTarget(0.7).restart()
+        node.fx = d3.event.x
+        node.fy = d3.event.y
+    }).on('end', function (node) {
+        if (!d3.event.active) {
+            simulation.alphaTarget(0)
+        }
+        node.fx = null
+        node.fy = null
+    })
+
+    // select node is called on every click
+    // we either update the data according to the selection
+    // or reset the data if the same node is clicked twice
+    function selectNode(selectedNode) {
+        if (selectedId === selectedNode.id) {
+            selectedId = undefined
+            resetData()
+            updateSimulation()
+        } else {
+            selectedId = selectedNode.id
+            updateData(selectedNode)
+            updateSimulation()
+        }
+
+        var neighbors = getNeighbors(selectedNode)
+
+        // we modify the styles to highlight selected nodes
+        nodeElements.attr('fill', function (node) { return getNodeColor(node, neighbors) })
+        textElements.attr('fill', function (node) { return getTextColor(node, neighbors) })
+        linkElements.attr('stroke', function (link) { return getLinkColor(selectedNode, link) })
+    }
+
+    // this helper simple adds all nodes and links
+    // that are missing, to recreate the initial state
+    function resetData() {
+        var nodeIds = nodes.map(function (node) { return node.id })
+
+        baseNodes.forEach(function (node) {
+            if (nodeIds.indexOf(node.id) === -1) {
+                nodes.push(node)
+            }
+        })
+
+        links = baseLinks
+    }
+
+    // diffing and mutating the data
+    function updateData(selectedNode) {
+        var neighbors = getNeighbors(selectedNode)
+        var newNodes = baseNodes.filter(function (node) {
+            return neighbors.indexOf(node.id) > -1 || node.level === 1
+        })
+
+        var diff = {
+            removed: nodes.filter(function (node) { return newNodes.indexOf(node) === -1 }),
+            added: newNodes.filter(function (node) { return nodes.indexOf(node) === -1 })
+        }
+
+        diff.removed.forEach(function (node) { nodes.splice(nodes.indexOf(node), 1) })
+        diff.added.forEach(function (node) { nodes.push(node) })
+
+        links = baseLinks.filter(function (link) {
+            return link.target.id === selectedNode.id || link.source.id === selectedNode.id
+        })
+    }
+
+    function updateGraph() {
+        // links
+        linkElements = linkGroup.selectAll('line')
+            .data(links, function (link) {
+                return link.target.id + link.source.id
+            })
+
+        linkElements.exit().remove()
+
+        var linkEnter = linkElements
+            .enter().append('line')
+            .attr('stroke-width', 1)
+            .attr('stroke', 'rgba(50, 50, 50, 0.2)')
+
+        linkElements = linkEnter.merge(linkElements)
+
+        // nodes
+        nodeElements = nodeGroup.selectAll('circle')
+            .data(nodes, function (node) { return node.id })
+
+        nodeElements.exit().remove()
+
+        var nodeEnter = nodeElements
+            .enter()
+            .append('circle')
+            .attr('r', 6)
+            .attr('fill', function (node) { return node.level === 1 ? '#e668ec' : '#3bc3d8' })
+            .call(dragDrop)
+            // we link the selectNode method here
+            // to update the graph on every click
+            .on('click', selectNode)
+
+        nodeElements = nodeEnter.merge(nodeElements)
+
+        // texts
+        textElements = textGroup.selectAll('text')
+            .data(nodes, function (node) { return node.id })
+
+        textElements.exit().remove()
+
+        var textEnter = textElements
+            .enter()
+            .append('text')
+            .text(function (node) { return node.label })
+            .attr('font-size', 9)
+            .attr('font-family', 'sans-serif')
+            .attr('font-weight', 'bold')
+            .attr('dx', 20)
+            .attr('dy', 10)
+
+        textElements = textEnter.merge(textElements)
+    }
+
+    function updateSimulation() {
+        updateGraph()
+
+        simulation.nodes(nodes).on('tick', () => {
+            nodeElements
+                .attr('cx', function (node) { return node.x = Math.max(radius, Math.min(width - radius, node.x)); })
+                .attr('cy', function (node) { return node.y = Math.max(radius, Math.min(height - radius, node.y)); })
+            textElements
+                .attr('x', function (node) { return node.x })
+                .attr('y', function (node) { return node.y })
+            linkElements
+                .attr('x1', function (link) { return link.source.x })
+                .attr('y1', function (link) { return link.source.y })
+                .attr('x2', function (link) { return link.target.x })
+                .attr('y2', function (link) { return link.target.y })
+        })
+
+        simulation.force('link').links(links)
+        simulation.alphaTarget(0.7).restart()
+    }
+
+    // last but not least, we call updateSimulation
+    // to trigger the initial render
+    updateSimulation()
+
+</script>
